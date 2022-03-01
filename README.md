@@ -1,4 +1,30 @@
-# Bootcamp Week 13 - E-Commerce Back-End Assignment.
+# Bootcamp Week 13 - E-Commerce(style) Back-End Assignment featuring Insomnia
+
+For the 13th assignment in the bootcamp, the task was to finish building the back-end of an e-commerce site by modifying starter code given to us. ([link to video]) at the time of writing, there is an issue with connecting to sequlize, this will be fixed and a video will be submitted.
+
+> ## Installation <br>
+> Clone repo to local. <br>
+navigate to `.env` <br>
+Enter in you SQL Password associated with your email: `password: <yourSQLpassword>` <br>
+Run command `npm install` from inside the Develop directory. <br>
+Run `npm run schema` - Type in your passsword, if you have one. <br>
+Run `npm run seed` <br>
+Run `npm run start`( Start Application) <br><br>
+[Installation video & Demo!] <br><br>
+
+## About
+
+Using all CRUD (create, read, update, and delete) Methods inside Insomnia allows the user to quickly and easily GET/POST/PUT/DELETE all data within the database.
+
+> ## Resources and Technology Used <br>
+> `npm mysql2`<br>
+`npm express`<br>
+`npm dotenv`<br>
+`npm sequalize`<br>
+`insomnia`<br>
+UCSD Full-Stack Bootcamp<br><br>
+
+
 
 ## Acceptance Criteria
 

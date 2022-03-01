@@ -1,9 +1,11 @@
 const router = require('express').Router();
-const { restart } = require('nodemon');
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
-// similar to the category-routes, 2 diifferent ways to solve will be shown
-router.get('/', (req, res) => {
+// The `/api/products` endpoint
+
+// get all products
+router.get('/', async (req, res) => {
+
   try {
     const productData = await Product.findAll({
       include: [{ model: Category},{model: Tag}]
@@ -14,24 +16,21 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
-  Product.findOne({
-    where: {
-      id: req.params.id,
-    },
-    include: [
-      Category,
-      {
-        model: Tag,
-        through: ProductTag,
-      },
-    ],
-  })
-    .then((products) => res.json(products))
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
+router.get('/:id', async (req, res) => {
+  try {
+    const productData = await Product.findByPk(req.params.id, {
+      include: [{ model: Category},{model: Tag}]
     });
+
+    if (!productData) {
+      res.status(404).json({ message: 'No Product found with this id!' });
+      return;
+    }
+
+    res.status(200).json(productData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // create new product
@@ -50,14 +49,14 @@ router.post('/', (req, res) => {
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
-            product_id: product.id,
+            productId: product.id,
             tag_id,
           };
         });
         return ProductTag.bulkCreate(productTagIdArr);
       }
       // if no product tags, just respond
-      res.status(200).json(product);
+      return categoryData = product.create(req.body);
     })
     .then((productTagIds) => res.status(200).json(productTagIds))
     .catch((err) => {
@@ -108,7 +107,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const productData = await Product.destroy({
       where: {
@@ -126,22 +125,5 @@ router.delete('/:id', (req, res) => {
     res.status(500).json(err);
   }
 });
-
-// the alernative to the delete route above:
-// router.delete('/:id', (req, res) => {
-//   Product.destroy({
-//     where: {
-//       id: req.params.id,
-//     },
-//   })
-//    .then ((products) => {
-//      console.log(products);
-//      res.json(products);
-//    })
-//    .catch((err) => {
-//      console.log(err);
-//      res.status(400).json(err);
-//    });
-// });
 
 module.exports = router;
